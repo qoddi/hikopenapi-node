@@ -1,0 +1,20 @@
+{
+  "name": "hikopenapi-node",
+  "version": "1.0.1",
+  "description": g'i",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:dev": "node-gyp build --debug",
+    "build": "node-gyp build"
+  },
+  "keywords": [
+    "hikvision",
+    "openapi"
+  ],
+  "author": "qoddi",
+  "license": "MIT",
+  "dependencies": {
+    "bindings": "^1.5.0"
+  }
+}

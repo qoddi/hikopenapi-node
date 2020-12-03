@@ -1,7 +1,7 @@
 {
   "name": "hikopenapi-node",
-  "version": "1.0.1",
-  "description": g'i",
+  "version": "1.0.2",
+  "description": "hikvision openapi for ifar/isee artemis rest service",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +12,18 @@
     "hikvision",
     "openapi"
   ],
-  "author": "qoddi",
+  "author": {
+    "name": "crzvip",
+    "email": "moranran8023@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qoddi/hikopenapi-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qoddi/hikopenapi-node/issues",
+    "email": "moranran8023@gmail.com"
+  },
   "license": "MIT",
   "dependencies": {
     "bindings": "^1.5.0"

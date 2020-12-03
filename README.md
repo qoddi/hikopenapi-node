@@ -1,7 +1,10 @@
 # HIKOPENAPI-NODE
 iSee/iFar Artemis Http Client Nodejs SDK
 
-[海康威视开放平台](https://open.hikvision.com)
+
+接口获取:[海康威视开放平台](https://open.hikvision.com)
+
+github:https://github.com/qoddi/hikopenapi-node.git
 
 适配ISC/PVIA等基于iSee/iFar架构的平台，平台需部署openapi网关后即可调用相关接口
 

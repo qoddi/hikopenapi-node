@@ -325,7 +325,7 @@ std::string artemisPost(std::string dllPath, std::string url, std::map<string, s
     string szLocal = _U82A(szResponse.c_str());
     cout << "[artemisPost]request response:" << szLocal << "\n"
          << endl;
-    return szLocal;
+    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocal + "\"}";;
 }
 
 //真实调用的get方法
@@ -340,7 +340,7 @@ std::string artemisGet(std::string dllPath, std::string url, std::map<string, st
     string szLocal = _U82A(szResponse.c_str());
     cout << "[artemisGet]request response:" << szLocal << "\n"
          << endl;
-    return szLocal;
+    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocal + "\"}";;
 }
 
 //真实调用的put方法
@@ -358,7 +358,7 @@ std::string artemisPut(std::string dllPath, std::string url, std::map<string, st
     string szLocal = _U82A(szResponse.c_str());
     cout << "[artemisPut]request response:" << szLocal << "\n"
          << endl;
-    return szLocal;
+    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocal + "\"}";;
 }
 
 //真实调用的delete方法
@@ -372,7 +372,7 @@ std::string artemisDelete(std::string dllPath, std::string url, std::map<string,
     string szLocal = _U82A(szResponse.c_str());
     cout << "[artemisDelete]request response:" << szLocal << "\n"
          << endl;
-    return szLocal;
+    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocal + "\"}";;
 }
 
 //根据程序demo提供的方法进行测试调用的函数

@@ -17,8 +17,8 @@
             'defines':[]
           }]
       ],
-      "cflags!": ["-fno-exceptions -Wl,-z,origin -Wl,-rpath='$ORIGIN/test'"],
-      "cflags_cc!": ["-fno-exceptions -Wl,-z,origin -Wl,-rpath='$ORIGIN/test'"],
+      "cflags!": ["-fno-exceptions -Wl,-z,origin -Wl,-rpath='$ORIGIN/lib'"],
+      "cflags_cc!": ["-fno-exceptions -Wl,-z,origin -Wl,-rpath='$ORIGIN/lib'"],
       "defines": ["NAPI_CPP_EXCEPTIONS"],
 
     },
@@ -28,7 +28,7 @@
       "dependencies" : [ "hikopenapi" ],
       "copies": [
         {
-          'destination': '<(module_root_dir)/../../lib/linux/x64/',
+          'destination': '<(module_root_dir)/../../../lib/linux/x64/',
           'files': ['<(module_root_dir)/build/Release/hikopenapi.node']
         }
       ],

@@ -1,6 +1,6 @@
 {
   "name": "hikopenapi-node",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "hikvision openapi for ifar/isee artemis rest service",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,9 @@
   },
   "keywords": [
     "hikvision",
-    "openapi"
+    "openapi",
+    "artemis",
+    "hik"
   ],
   "author": {
     "name": "crzvip",

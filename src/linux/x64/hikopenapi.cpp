@@ -133,7 +133,7 @@ std::string artemisPost(std::string dllPath, std::string url, std::map<string, s
     stringstream ss;
     stringstream ss2;
     //ss << dllPath.c_str() << "libHttpUtil.so";
-    ss<<"./libHttpUtil.so";
+    ss<<"libHttpUtil.so";
     cout << "[dlopen]dll full path: " << ss.str().c_str() << endl;
     cout << "[artemisPost]request url:" << url << "\n"
          << endl;

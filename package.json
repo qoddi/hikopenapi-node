@@ -1,12 +1,13 @@
 {
   "name": "hikopenapi-node",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "hikvision openapi for ifar/isee artemis rest service",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "node-gyp build --debug",
-    "build": "node-gyp build"
+    "buildwin": "cd ./src/windows && node-gyp rebuild",
+    "buildlinux": "cd ./src/linux/x64 && node-gyp rebuild"
   },
   "keywords": [
     "hikvision",

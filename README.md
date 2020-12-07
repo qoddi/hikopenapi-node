@@ -31,7 +31,7 @@ $ npm install hikopenapi-node
 
 ## Usage
 ### Windows
-windows下安装部署即可直接使用，无需特殊配置，基于cpp认证库，提供post get put delete四种方法支持
+windows下安装部署即可直接使用，无需特殊配置，基于cpp认证库，提供post get put delete四种方法支持,返回data需要使用Base64解密
 Example:
 ```js
 const Hikopenapi=require('hikopenapi-node');
@@ -66,10 +66,10 @@ console.log(httpRes);　//{"status":true,error:0,data:""}
 
 
 ### Linux
-linux下需要配置动态库的环境变量，基于c认证库，提供post get两种方法支持，配置方法如下
+linux下需要配置动态库的环境变量，基于c认证库，提供post get两种方法支持，返回data需要使用Base64解密，配置方法如下
 1. 查找本模块的安装位置，拷贝目录下lib/linux/x64下全部文件到/root/openapilib文件夹(自行创建)
 2. 编辑/etc/ld.so.conf,在最下面新增一行/root/openapiilib并保存退出
-3. 执行ldconfig指令,使配置文件生效果，然后就和windows一样使用了
+3. 执行ldconfig指令,使配置文件生效，然后就和windows一样使用了
 
 Example:
 ```js

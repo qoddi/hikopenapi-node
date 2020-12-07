@@ -325,7 +325,11 @@ std::string artemisPost(std::string dllPath, std::string url, std::map<string, s
     string szLocal = _U82A(szResponse.c_str());
     cout << "[artemisPost]request response:" << szLocal << "\n"
          << endl;
-    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocal + "\"}";;
+    char* base64EncodeBuffer = NULL;
+	int iRet = base64_encode(szLocal.c_str(), strlen(szLocal.c_str()), &base64EncodeBuffer);
+    cout<<base64EncodeBuffer<<endl;
+    string szLocalBase64=base64EncodeBuffer;
+    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocalBase64+ "\"}";
 }
 
 //真实调用的get方法
@@ -340,7 +344,11 @@ std::string artemisGet(std::string dllPath, std::string url, std::map<string, st
     string szLocal = _U82A(szResponse.c_str());
     cout << "[artemisGet]request response:" << szLocal << "\n"
          << endl;
-    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocal + "\"}";;
+    char* base64EncodeBuffer = NULL;
+	int iRet = base64_encode(szLocal.c_str(), strlen(szLocal.c_str()), &base64EncodeBuffer);
+    cout<<base64EncodeBuffer<<endl;
+    string szLocalBase64=base64EncodeBuffer;
+    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocalBase64+ "\"}";
 }
 
 //真实调用的put方法
@@ -358,7 +366,11 @@ std::string artemisPut(std::string dllPath, std::string url, std::map<string, st
     string szLocal = _U82A(szResponse.c_str());
     cout << "[artemisPut]request response:" << szLocal << "\n"
          << endl;
-    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocal + "\"}";;
+    char* base64EncodeBuffer = NULL;
+	int iRet = base64_encode(szLocal.c_str(), strlen(szLocal.c_str()), &base64EncodeBuffer);
+    cout<<base64EncodeBuffer<<endl;
+    string szLocalBase64=base64EncodeBuffer;
+    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocalBase64+ "\"}";
 }
 
 //真实调用的delete方法
@@ -372,7 +384,11 @@ std::string artemisDelete(std::string dllPath, std::string url, std::map<string,
     string szLocal = _U82A(szResponse.c_str());
     cout << "[artemisDelete]request response:" << szLocal << "\n"
          << endl;
-    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocal + "\"}";;
+    char* base64EncodeBuffer = NULL;
+	int iRet = base64_encode(szLocal.c_str(), strlen(szLocal.c_str()), &base64EncodeBuffer);
+    cout<<base64EncodeBuffer<<endl;
+    string szLocalBase64=base64EncodeBuffer;
+    return  "{\"status\":true,\"error\":0,\"data\":\"" + szLocalBase64+ "\"}";
 }
 
 //根据程序demo提供的方法进行测试调用的函数

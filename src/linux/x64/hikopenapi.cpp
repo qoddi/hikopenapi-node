@@ -25,6 +25,120 @@ typedef char *(*pFUNHttpPost)(const char *, const char *, const char *, const ch
 typedef int (*pFUNGetLastStatus)();
 typedef void (*pFUNFree)(char *);
 
+///////////////////// 认证库内置部分函数 ///////////////////////
+static char base64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static int pos(char c)
+{
+    char *p;
+    for (p = base64; *p; p++)
+        if (*p == c)
+            return p - base64;
+    return -1;
+}
+
+int base64_encode(const void *data, int size, char **str)
+{
+    char *s, *p;
+    int i;
+    int c;
+    const unsigned char *q;
+
+    s = (char *)malloc(size * 4 / 3 + 4);
+    p = s;
+    if (p == NULL)
+        return -1;
+    q = (const unsigned char *)data;
+    i = 0;
+    for (i = 0; i < size;)
+    {
+        c = q[i++];
+        c *= 256;
+        if (i < size)
+            c += q[i];
+        i++;
+        c *= 256;
+        if (i < size)
+            c += q[i];
+        i++;
+        p[0] = base64[(c & 0x00fc0000) >> 18];
+        p[1] = base64[(c & 0x0003f000) >> 12];
+        p[2] = base64[(c & 0x00000fc0) >> 6];
+        p[3] = base64[(c & 0x0000003f) >> 0];
+        if (i > size)
+            p[3] = '=';
+        if (i > size + 1)
+            p[2] = '=';
+        p += 4;
+    }
+    *p = 0;
+    *str = s;
+    //if (s == NULL)
+    //    return -1;
+    return strlen(s);
+}
+
+int base64_decode(const char *str, void *data)
+{
+    const char *p;
+    unsigned char *q;
+    int c;
+    int x;
+    int done = 0;
+    q = (unsigned char *)data;
+    for (p = str; *p && !done; p += 4)
+    {
+        x = pos(p[0]);
+        if (x >= 0)
+            c = x;
+        else
+        {
+            done = 3;
+            break;
+        }
+        c *= 64;
+
+        x = pos(p[1]);
+        if (x >= 0)
+            c += x;
+        else
+            return -1;
+        c *= 64;
+
+        if (p[2] == '=')
+            done++;
+        else
+        {
+            x = pos(p[2]);
+            if (x >= 0)
+                c += x;
+            else
+                return -1;
+        }
+        c *= 64;
+
+        if (p[3] == '=')
+            done++;
+        else
+        {
+            if (done)
+                return -1;
+            x = pos(p[3]);
+            if (x >= 0)
+                c += x;
+            else
+                return -1;
+        }
+        if (done < 3)
+            *q++ = (c & 0x00ff0000) >> 16;
+
+        if (done < 2)
+            *q++ = (c & 0x0000ff00) >> 8;
+        if (done < 1)
+            *q++ = (c & 0x000000ff) >> 0;
+    }
+    return q - (unsigned char *)data;
+}
+
 ///////////////////// 动态调用时需要指定的内容 ///////////////////////
 std::string artemisGet(std::string dllPath, std::string url, std::map<string, string> headers, std::string appKey, std::string appSecret, int timeout)
 {
@@ -41,7 +155,8 @@ std::string artemisGet(std::string dllPath, std::string url, std::map<string, st
     handle = dlopen(ss.str().c_str(), RTLD_NOW | RTLD_GLOBAL);
     if (!handle)
     {
-        fs << "dll load failed\n" << endl;
+        fs << "dll load failed\n"
+           << endl;
         printf("[dlopen]dll load failed\n");
         fprintf(stderr, dlerror());
         return "{\"status\":false,\"error\":30000}";
@@ -54,7 +169,8 @@ std::string artemisGet(std::string dllPath, std::string url, std::map<string, st
     pFUNHttpGet pf = (pFUNHttpGet)dlsym(handle, funName_HttpGet);
     if ((error = dlerror()) != NULL)
     {
-        fs << "[dlsym]load fp pFUNHttpGet failed\n" << endl;
+        fs << "[dlsym]load fp pFUNHttpGet failed\n"
+           << endl;
         fprintf(stderr, dlerror());
         return "{\"status\":false,\"error\":30001}";
     }
@@ -66,7 +182,8 @@ std::string artemisGet(std::string dllPath, std::string url, std::map<string, st
     pFUNGetLastStatus pf2 = (pFUNGetLastStatus)dlsym(handle, funName_GetLastStatus);
     if ((error = dlerror()) != NULL)
     {
-        fs << "[dlsym]load fp2 pFUNGetLastStatus failed\n" << endl;
+        fs << "[dlsym]load fp2 pFUNGetLastStatus failed\n"
+           << endl;
         fprintf(stderr, dlerror());
         return "{\"status\":false,\"error\":30001}";
     }
@@ -77,7 +194,8 @@ std::string artemisGet(std::string dllPath, std::string url, std::map<string, st
     pFUNFree pf3 = (pFUNFree)dlsym(handle, funName_Free);
     if ((error = dlerror()) != NULL)
     {
-        fs << "[dlsym]load fp3 pFUNFree failed\n" << endl;
+        fs << "[dlsym]load fp3 pFUNFree failed\n"
+           << endl;
         fprintf(stderr, dlerror());
         return "{\"status\":false,\"error\":30001}";
     }
@@ -114,14 +232,19 @@ std::string artemisGet(std::string dllPath, std::string url, std::map<string, st
     }
     else
     {
-        response = "{\"status\":true,\"error\":0,\"data\":\"" + string(rsp, dataLength) + "\"}";
+        string szLocal = string(rsp, dataLength);
+        char *base64EncodeBuffer = NULL;
+        int iRet = base64_encode(szLocal.c_str(), strlen(szLocal.c_str()), &base64EncodeBuffer);
+        cout << base64EncodeBuffer << endl;
+        string szLocalBase64 = base64EncodeBuffer;
+        response = "{\"status\":true,\"error\":0,\"data\":\"" + szLocalBase64 + "\"}";
     }
     cout << "[artemisPost]request response:" << response << "\n"
          << endl;
 
     //release memory
     pf3(rsp);
-
+    dlclose(handle);
     return response;
 }
 
@@ -133,7 +256,7 @@ std::string artemisPost(std::string dllPath, std::string url, std::map<string, s
     stringstream ss;
     stringstream ss2;
     //ss << dllPath.c_str() << "libHttpUtil.so";
-    ss<<"libHttpUtil.so";
+    ss << "libHttpUtil.so";
     cout << "[dlopen]dll full path: " << ss.str().c_str() << endl;
     cout << "[artemisPost]request url:" << url << "\n"
          << endl;
@@ -155,7 +278,8 @@ std::string artemisPost(std::string dllPath, std::string url, std::map<string, s
     pFUNHttpPost pf = (pFUNHttpPost)dlsym(handle, funName_HttpPost);
     if ((error = dlerror()) != NULL)
     {
-        fs << "[dlsym]load fp pFUNHttpPost failed\n" << endl;
+        fs << "[dlsym]load fp pFUNHttpPost failed\n"
+           << endl;
         fprintf(stderr, dlerror());
         return "{\"status\":false,\"error\":30001}";
     }
@@ -167,7 +291,8 @@ std::string artemisPost(std::string dllPath, std::string url, std::map<string, s
     pFUNGetLastStatus pf2 = (pFUNGetLastStatus)dlsym(handle, funName_GetLastStatus);
     if ((error = dlerror()) != NULL)
     {
-        fs << "[dlsym]load fp2 pFUNGetLastStatus failed\n" << endl;
+        fs << "[dlsym]load fp2 pFUNGetLastStatus failed\n"
+           << endl;
         fprintf(stderr, dlerror());
         return "{\"status\":false,\"error\":30001}";
     }
@@ -178,7 +303,8 @@ std::string artemisPost(std::string dllPath, std::string url, std::map<string, s
     pFUNFree pf3 = (pFUNFree)dlsym(handle, funName_Free);
     if ((error = dlerror()) != NULL)
     {
-        fs << "[dlsym]load fp3 pFUNFree failed\n" << endl;
+        fs << "[dlsym]load fp3 pFUNFree failed\n"
+           << endl;
         fprintf(stderr, dlerror());
         return "{\"status\":false,\"error\":30001}";
     }
@@ -215,14 +341,19 @@ std::string artemisPost(std::string dllPath, std::string url, std::map<string, s
     }
     else
     {
-        response = "{\"status\":true,\"error\":0,\"data\":\"" + string(rsp, dataLength) + "\"}";
+        string szLocal = string(rsp, dataLength);
+        char *base64EncodeBuffer = NULL;
+        int iRet = base64_encode(szLocal.c_str(), strlen(szLocal.c_str()), &base64EncodeBuffer);
+        cout << base64EncodeBuffer << endl;
+        string szLocalBase64 = base64EncodeBuffer;
+        response = "{\"status\":true,\"error\":0,\"data\":\"" + szLocalBase64 + "\"}";
     }
     cout << "[artemisPost]request response:" << response << "\n"
          << endl;
 
     //release memory
     pf3(rsp);
-
+    dlclose(handle);
     return response;
 }
 
